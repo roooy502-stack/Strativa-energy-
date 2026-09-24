@@ -1,0 +1,34 @@
+# Strativa Energy
+
+> Owner-side development support for international developers entering and progressing utility-scale solar and battery energy storage (BESS) projects in Australia. Based in Melbourne, Victoria.
+
+Strativa Energy is an Australian development partner for international renewable energy developers. Services cover market entry, planning and environmental approvals, land and stakeholder liaison, grid and NEM connection approvals, development workstream management, and due diligence.
+
+## Services
+
+- [Market Entry Framework](https://strativaenergy.com.au/#capabilities): Market landscape review, regulatory mapping, stakeholder identification, initial risk assessment, consultant procurement, governance and reporting setup.
+- [Development Workstream Management](https://strativaenergy.com.au/#capabilities): Procurement and management of planning, environmental, heritage and engineering advisers; integrated scheduling, dependency, risk and milestone controls.
+- [Planning & Environmental Approvals](https://strativaenergy.com.au/#capabilities): State and local planning pathways, development applications, Cultural Heritage Management Plans, Registered Aboriginal Party engagement, ecological studies, EPBC Act and state referrals.
+- [Land & Stakeholder Liaison](https://strativaenergy.com.au/#capabilities): Landowner outreach, options, leases, easements, title and access review, council and community engagement.
+- [Grid & Connection Approvals](https://strativaenergy.com.au/#capabilities): The six-stage NEM connection pathway, including PSS/E and PSCAD modelling, system strength, performance-standard negotiation, AEMO registration and R1/R2/R3.
+- [Due Diligence](https://strativaenergy.com.au/#capabilities): Yield, constraints, buildability, permits, tenure, connection status and curtailment exposure review with go/no-go advice.
+
+## Starter packages
+
+- [Fatal Flaw Review](https://strativaenergy.com.au/#services): Cross-workstream site risk review and go/no-go advice.
+- [Connection Enquiry Pack](https://strativaenergy.com.au/#services): Connection strategy, enquiry preparation and lodgement support.
+- [Planning Pathway Review](https://strativaenergy.com.au/#services): Planning pathways, study sequence and consultant plan.
+- [Approvals Scoping Study](https://strativaenergy.com.au/#services): Planning, environmental and cultural-heritage scope.
+- [Grid Capacity Check](https://strativaenergy.com.au/#services): Capacity, voltage, headroom and connection-risk screening.
+- [Site Screening Report](https://strativaenergy.com.au/#services): Candidate-site shortlist and integrated constraint screen.
+- [Landowner Outreach Pilot](https://strativaenergy.com.au/#services): Structured initial outreach to selected landowners.
+- [Stakeholder Mapping](https://strativaenergy.com.au/#services): Council, community, authority and influence map.
+- [Project Health Check](https://strativaenergy.com.au/#services): Development workstream review, red flags and priority actions.
+- [On-Call Advisory](https://strativaenergy.com.au/#services): Flexible governance, risk, approvals and development advice.
+
+## Contact
+
+- Email: info@strativaenergy.com.au
+- Website: https://strativaenergy.com.au/
+- LinkedIn: https://www.linkedin.com/company/strativa-energy
+- Office: 470 St Kilda Rd, Melbourne VIC 3004, Australia

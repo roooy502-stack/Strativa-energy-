@@ -1,0 +1,9 @@
+# robots.txt for Strativa Energy
+# https://strativaenergy.com.au/
+User-agent: *
+Allow: /
+
+# Keep the deploy preview and source maps out of the index
+Disallow: /404.html
+
+Sitemap: https://strativaenergy.com.au/sitemap.xml

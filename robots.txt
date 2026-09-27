@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.YOUR-DOMAIN.com/sitemap.xml
+Sitemap: https://strativaenergy.com.au/sitemap.xml

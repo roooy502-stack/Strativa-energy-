@@ -1,0 +1,11 @@
+{
+  "site_url": "https://strativaenergy.com.au/",
+  "timezone": "Australia/Melbourne",
+  "report_schedule": "monthly_on_day_1_at_08_00",
+  "storage": "Google Drive folder: Strativa Energy Monthly Reports",
+  "sources": ["Google Analytics 4", "Google Search Console"],
+  "mode": "read_only",
+  "website_changes": false,
+  "user_level_data": false,
+  "setup_status": "ready_for_one_time_apps_script_authorization"
+}

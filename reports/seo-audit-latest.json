@@ -1,0 +1,146 @@
+{
+  "audit_version": "1.0.0",
+  "site": "https://strativaenergy.com.au/",
+  "generated_at": "2026-10-28T01:24:00.104649+00:00",
+  "pages_checked": 1,
+  "pages": [
+    {
+      "path": "index.html",
+      "title": "Strativa Energy | Australia Market Entry & Development Support",
+      "title_length": 62,
+      "description": "Strativa Energy is your Australian development partner: owner-side development support for international developers entering and progressing utility-scale solar and BESS projects in Australia.",
+      "description_length": 192,
+      "canonical": "https://strativaenergy.com.au/",
+      "h1": [
+        "Your Australian development partner."
+      ],
+      "h2": [
+        "Specialist Australian capability.",
+        "Six services. One development function.",
+        "Focused entry points.",
+        "Four stages that follow the project forward.",
+        "Built around the developer.",
+        "Your owner-side development function.",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 5,
+      "images_missing_alt": [],
+      "internal_links": 0,
+      "broken_local_links": [],
+      "word_count": 1000,
+      "schema_types": [
+        "Organization"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    }
+  ],
+  "robots": {
+    "exists": true,
+    "has_sitemap_directive": true
+  },
+  "sitemap": {
+    "exists": true,
+    "urls": [
+      "https://strativaenergy.com.au/"
+    ],
+    "pages_missing": []
+  },
+  "errors": [
+    {
+      "code": "title_length",
+      "page": "index.html",
+      "severity": "warning",
+      "message": "Title length is 62 characters"
+    },
+    {
+      "code": "description_length",
+      "page": "index.html",
+      "severity": "warning",
+      "message": "Meta description length is 192 characters"
+    }
+  ],
+  "improvement_opportunities": [
+    {
+      "code": "service_business_schema",
+      "page": "index.html",
+      "message": "Review ProfessionalService or LocalBusiness schema where appropriate"
+    },
+    {
+      "code": "geo_review",
+      "page": "index.html",
+      "message": "Review entity, service, location, contact, and evidence clarity for GEO"
+    }
+  ],
+  "aeo_review_queue": [
+    {
+      "question": "What does Strativa Energy specialise in?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "What renewable energy services does Strativa Energy provide?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "Does Strativa Energy support solar and BESS projects?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "How does Strativa Energy support energy project development?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "How does Strativa Energy support project delivery?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "What locations does Strativa Energy serve?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    },
+    {
+      "question": "Who should contact Strativa Energy?",
+      "status": "review_required",
+      "note": "Do not publish automatically; use only approved visible content."
+    }
+  ],
+  "geo_review_queue": [
+    {
+      "topic": "company_identity",
+      "description": "Keep Strativa Energy name, role, and owner-side positioning consistent."
+    },
+    {
+      "topic": "services",
+      "description": "Ensure service descriptions remain visible, specific, and evidence-backed."
+    },
+    {
+      "topic": "location",
+      "description": "Review Australia and Melbourne/VIC geographic clarity against visible content."
+    },
+    {
+      "topic": "contact",
+      "description": "Keep the confirmed email and contact pathway clear."
+    },
+    {
+      "topic": "quotable_answers",
+      "description": "Review concise factual paragraphs that can answer project-development questions."
+    }
+  ],
+  "recommended_next_steps": [
+    "Review title and meta description lengths before changing copy.",
+    "Keep FAQ answers and FAQPage schema manual and approval-based.",
+    "Add only evidence-backed structured data that matches visible page content.",
+    "Run the optimizer in dry-run mode before reviewing any pull request."
+  ]
+}

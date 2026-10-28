@@ -1,0 +1,69 @@
+{
+  "site": {
+    "name": "Strativa Energy",
+    "url": "https://strativaenergy.com.au/",
+    "language": "en-AU",
+    "country": "Australia",
+    "confirmed_location": "Melbourne, VIC, Australia",
+    "contact_email": "info@strativaenergy.com.au",
+    "linkedin": "https://www.linkedin.com/company/strativa-energy"
+  },
+  "primary_keywords": [
+    "Australian renewable energy project development",
+    "utility-scale solar project development Australia",
+    "battery energy storage project development Australia",
+    "owner-side development support Australia"
+  ],
+  "secondary_keywords": [
+    "solar project development",
+    "BESS project development",
+    "planning and environmental approvals",
+    "grid connection approvals",
+    "land and stakeholder liaison",
+    "development workstream management",
+    "renewable energy due diligence"
+  ],
+  "commercial_intent_keywords": [
+    "Australian solar development partner",
+    "BESS development support Australia",
+    "renewable energy project due diligence Australia",
+    "grid connection advisory Australia"
+  ],
+  "location_keywords": [
+    "Australia",
+    "Melbourne",
+    "Victoria"
+  ],
+  "industry_keywords": [
+    "solar",
+    "battery energy storage",
+    "BESS",
+    "renewable energy",
+    "energy project development",
+    "NEM connection pathway"
+  ],
+  "service_to_page_mapping": {
+    "Market Entry Framework": ["/"],
+    "Development Workstream Management": ["/"],
+    "Planning & Environmental Approvals": ["/"],
+    "Land & Stakeholder Liaison": ["/"],
+    "Grid & Connection Approvals": ["/"],
+    "Due Diligence": ["/"]
+  },
+  "aeo_questions": [
+    "What does Strativa Energy specialise in?",
+    "What renewable energy services does Strativa Energy provide?",
+    "Does Strativa Energy support solar and BESS projects?",
+    "How does Strativa Energy support energy project development?",
+    "How does Strativa Energy support project delivery?",
+    "What locations does Strativa Energy serve?",
+    "Who should contact Strativa Energy?"
+  ],
+  "geo_review_queue": [
+    {"topic": "company_identity", "description": "Keep Strativa Energy name, role, and owner-side positioning consistent."},
+    {"topic": "services", "description": "Ensure service descriptions remain visible, specific, and evidence-backed."},
+    {"topic": "location", "description": "Review Australia and Melbourne/VIC geographic clarity against visible content."},
+    {"topic": "contact", "description": "Keep the confirmed email and contact pathway clear."},
+    {"topic": "quotable_answers", "description": "Review concise factual paragraphs that can answer project-development questions."}
+  ]
+}

@@ -1,0 +1,49 @@
+name: Strativa Energy SEO AEO GEO Audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Run SEO AEO GEO audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check biweekly ISO week guard
+        id: week_guard
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run_audit=true" >> "$GITHUB_OUTPUT"
+          elif [ $((10#$(date -u +%V) % 2)) -eq 0 ]; then
+            echo "run_audit=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_audit=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping odd ISO week; audit runs every two weeks."
+          fi
+      - name: Checkout
+        if: steps.week_guard.outputs.run_audit == 'true'
+        uses: actions/checkout@v4
+      - name: Set up Python
+        if: steps.week_guard.outputs.run_audit == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run audit
+        if: steps.week_guard.outputs.run_audit == 'true'
+        run: python3 scripts/seo_audit.py
+      - name: Validate JSON report
+        if: steps.week_guard.outputs.run_audit == 'true'
+        run: python3 -m json.tool reports/seo-audit-latest.json >/dev/null
+      - name: Upload audit reports
+        if: steps.week_guard.outputs.run_audit == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: strativa-seo-aeo-geo-audit
+          path: |
+            reports/seo-audit-latest.md
+            reports/seo-audit-latest.json

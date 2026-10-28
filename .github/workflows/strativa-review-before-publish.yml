@@ -1,0 +1,81 @@
+name: Strativa Energy Review Before Publish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  review:
+    name: Propose safe deterministic SEO changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Run audit
+        run: python3 scripts/seo_audit.py
+      - name: Validate audit JSON
+        run: python3 -m json.tool reports/seo-audit-latest.json >/dev/null
+      - name: Run optimizer and create branch only when needed
+        id: optimizer
+        shell: bash
+        run: |
+          set +e
+          python3 scripts/seo_optimizer.py --apply > optimizer-output.txt 2>&1
+          status=$?
+          cat optimizer-output.txt
+          if [ "$status" -ne 0 ]; then exit "$status"; fi
+          branch=$(python3 - <<'PY'
+          import json, re
+          text=open('optimizer-output.txt', encoding='utf-8').read()
+          m=re.search(r'"branch":\s*"([^"]+)"', text)
+          print(m.group(1) if m else '')
+          PY
+          )
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "${{ steps.optimizer.outputs.branch }}" ] && git diff --quiet -- index.html sitemap.xml robots.txt; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ steps.optimizer.outputs.branch }}" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Commit and push review branch
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ steps.optimizer.outputs.branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html sitemap.xml robots.txt
+          git commit -m "chore: propose safe SEO metadata improvements"
+          git push --set-upstream origin "$BRANCH"
+      - name: Create pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.optimizer.outputs.branch }}
+        run: |
+          gh pr create --base main --head "$BRANCH" \
+            --title "Review safe SEO metadata improvements" \
+            --body-file reports/seo-audit-latest.md
+      - name: Upload review reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: strativa-review-before-publish
+          path: |
+            reports/seo-audit-latest.md
+            reports/seo-audit-latest.json
+            optimizer-output.txt

@@ -1,20 +1,19 @@
 # Strativa Energy SEO AEO GEO Audit
 
-- Generated: `2026-10-28T01:24:00.104649+00:00`
+- Generated: `2026-11-10T02:02:00.826151+00:00`
 - Pages checked: **1**
-- Errors and warnings: **2**
+- Errors and warnings: **0**
 - Improvement opportunities: **2**
 
 ## Page Summary
 
-| Page | Title | Description | H1 | H2 | Schema | Missing alt | Broken local links |
-|---|---:|---:|---:|---:|---|---:|---:|
-| `index.html` | 62 | 192 | 1 | 7 | Organization | 0 | 0 |
+| Page | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken local links |
+|---|---:|---:|---:|---:|---:|---|---:|---:|
+| `index.html` | 53 | 141 | 1 | 7 | 10 | Organization | 0 | 0 |
 
 ## Errors and Warnings
 
-- **WARNING** `title_length` — `index.html`: Title length is 62 characters
-- **WARNING** `description_length` — `index.html`: Meta description length is 192 characters
+- None found.
 
 ## Improvement Opportunities
 

@@ -1,15 +1,15 @@
 {
-  "audit_version": "1.0.0",
+  "audit_version": "1.1.0",
   "site": "https://strativaenergy.com.au/",
-  "generated_at": "2026-10-28T01:24:00.104649+00:00",
+  "generated_at": "2026-11-10T02:02:00.826151+00:00",
   "pages_checked": 1,
   "pages": [
     {
       "path": "index.html",
-      "title": "Strativa Energy | Australia Market Entry & Development Support",
-      "title_length": 62,
-      "description": "Strativa Energy is your Australian development partner: owner-side development support for international developers entering and progressing utility-scale solar and BESS projects in Australia.",
-      "description_length": 192,
+      "title": "Strativa Energy | Australian Solar & BESS Development",
+      "title_length": 53,
+      "description": "Strativa Energy supports international developers entering Australia and progressing utility-scale solar and battery energy storage projects.",
+      "description_length": 141,
       "canonical": "https://strativaenergy.com.au/",
       "h1": [
         "Your Australian development partner."
@@ -25,9 +25,9 @@
       ],
       "images": 5,
       "images_missing_alt": [],
-      "internal_links": 0,
+      "internal_links": 10,
       "broken_local_links": [],
-      "word_count": 1000,
+      "word_count": 999,
       "schema_types": [
         "Organization"
       ],
@@ -50,22 +50,10 @@
     "urls": [
       "https://strativaenergy.com.au/"
     ],
-    "pages_missing": []
+    "pages_missing": [],
+    "stale_urls": []
   },
-  "errors": [
-    {
-      "code": "title_length",
-      "page": "index.html",
-      "severity": "warning",
-      "message": "Title length is 62 characters"
-    },
-    {
-      "code": "description_length",
-      "page": "index.html",
-      "severity": "warning",
-      "message": "Meta description length is 192 characters"
-    }
-  ],
+  "errors": [],
   "improvement_opportunities": [
     {
       "code": "service_business_schema",

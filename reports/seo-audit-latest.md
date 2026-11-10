@@ -1,15 +1,15 @@
 # Strativa Energy SEO AEO GEO Audit
 
-- Generated: `2026-11-10T02:02:00.826151+00:00`
+- Generated: `2026-11-10T02:38:15.909889+00:00`
 - Pages checked: **1**
 - Errors and warnings: **0**
-- Improvement opportunities: **2**
+- Improvement opportunities: **0**
 
 ## Page Summary
 
 | Page | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken local links |
 |---|---:|---:|---:|---:|---:|---|---:|---:|
-| `index.html` | 53 | 141 | 1 | 7 | 10 | Organization | 0 | 0 |
+| `index.html` | 53 | 141 | 1 | 7 | 10 | Organization, ProfessionalService | 0 | 0 |
 
 ## Errors and Warnings
 
@@ -17,8 +17,7 @@
 
 ## Improvement Opportunities
 
-- `service_business_schema` — `index.html`: Review ProfessionalService or LocalBusiness schema where appropriate
-- `geo_review` — `index.html`: Review entity, service, location, contact, and evidence clarity for GEO
+- None found.
 
 ## AEO Review Queue
 

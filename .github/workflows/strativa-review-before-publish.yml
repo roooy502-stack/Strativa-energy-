@@ -42,6 +42,12 @@ jobs:
       - name: Validate audit JSON
         if: steps.week_guard.outputs.run_optimizer == 'true'
         run: python3 -m json.tool reports/seo-audit-latest.json >/dev/null
+      - name: Verify optimizer dry-run is read-only
+        if: steps.week_guard.outputs.run_optimizer == 'true'
+        run: |
+          before=$(git status --porcelain)
+          python3 scripts/seo_optimizer.py --dry-run
+          test "$before" = "$(git status --porcelain)"
       - name: Run optimizer and create branch only when needed
         id: optimizer
         if: steps.week_guard.outputs.run_optimizer == 'true'
@@ -64,7 +70,7 @@ jobs:
         id: changes
         if: steps.week_guard.outputs.run_optimizer == 'true'
         run: |
-          if [ -n "${{ steps.optimizer.outputs.branch }}" ] && git diff --quiet -- index.html sitemap.xml robots.txt; then
+          if [ -n "${{ steps.optimizer.outputs.branch }}" ] && git diff --quiet -- index.html sitemap.xml robots.txt reports/seo-audit-latest.json reports/seo-audit-latest.md; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           elif [ -n "${{ steps.optimizer.outputs.branch }}" ]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -78,7 +84,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html sitemap.xml robots.txt
+          git add index.html sitemap.xml robots.txt reports/seo-audit-latest.json reports/seo-audit-latest.md
           git commit -m "chore: propose safe SEO metadata improvements"
           git push --set-upstream origin "$BRANCH"
       - name: Create pull request

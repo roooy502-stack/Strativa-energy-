@@ -1,7 +1,7 @@
 {
   "audit_version": "1.1.0",
   "site": "https://strativaenergy.com.au/",
-  "generated_at": "2026-11-10T02:02:00.826151+00:00",
+  "generated_at": "2026-11-10T02:38:15.909889+00:00",
   "pages_checked": 1,
   "pages": [
     {
@@ -27,9 +27,10 @@
       "images_missing_alt": [],
       "internal_links": 10,
       "broken_local_links": [],
-      "word_count": 999,
+      "word_count": 1047,
       "schema_types": [
-        "Organization"
+        "Organization",
+        "ProfessionalService"
       ],
       "invalid_jsonld": [],
       "has_open_graph": true,
@@ -37,6 +38,7 @@
       "has_contact": true,
       "has_company_identity": true,
       "visible_question_headings": [
+        "How does Strativa Energy support Australian projects?",
         "Considering an Australian solar or BESS opportunity?"
       ]
     }
@@ -54,18 +56,7 @@
     "stale_urls": []
   },
   "errors": [],
-  "improvement_opportunities": [
-    {
-      "code": "service_business_schema",
-      "page": "index.html",
-      "message": "Review ProfessionalService or LocalBusiness schema where appropriate"
-    },
-    {
-      "code": "geo_review",
-      "page": "index.html",
-      "message": "Review entity, service, location, contact, and evidence clarity for GEO"
-    }
-  ],
+  "improvement_opportunities": [],
   "aeo_review_queue": [
     {
       "question": "What does Strativa Energy specialise in?",

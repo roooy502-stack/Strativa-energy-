@@ -236,7 +236,14 @@ def audit(repo_root: Path, targets: dict) -> dict:
         if not any(x in types for x in ("ProfessionalService", "LocalBusiness")):
             opportunity("service_business_schema", "Review ProfessionalService or LocalBusiness schema where appropriate")
         if not page["visible_question_headings"]: opportunity("aeo_questions", "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically")
-        opportunity("geo_review", "Review entity, service, location, contact, and evidence clarity for GEO")
+        geo_signals = (
+            page["has_company_identity"]
+            and bool(re.search(r"Australia|Australian|Melbourne|VIC", parser.text, re.I))
+            and bool(re.search(r"solar|battery|BESS|development|approvals|grid", parser.text, re.I))
+            and page["has_contact"]
+        )
+        if not geo_signals:
+            opportunity("geo_review", "Review entity, service, location, contact, and evidence clarity for GEO")
 
     duplicates = {value: count for value, count in Counter(x for x in titles if x).items() if count > 1}
     duplicate_descriptions = {value: count for value, count in Counter(x for x in descriptions if x).items() if count > 1}

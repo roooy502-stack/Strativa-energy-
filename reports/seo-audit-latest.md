@@ -1,15 +1,26 @@
 # Strativa Energy SEO AEO GEO Audit
 
-- Generated: `2026-11-10T02:38:15.909889+00:00`
-- Pages checked: **1**
+- Generated: `2026-11-19T21:03:20.136737+00:00`
+- Pages checked: **12** (11 indexable)
 - Errors and warnings: **0**
-- Improvement opportunities: **0**
+- Improvement opportunities: **1**
 
 ## Page Summary
 
-| Page | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken local links |
-|---|---:|---:|---:|---:|---:|---|---:|---:|
-| `index.html` | 53 | 141 | 1 | 7 | 10 | Organization, ProfessionalService | 0 | 0 |
+| Page | Indexable | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken links |
+|---|---|---:|---:|---:|---:|---:|---|---:|---:|
+| `404.html` | no | 32 | 42 | 1 | 0 | 21 | None | 0 | 0 |
+| `about/index.html` | yes | 54 | 157 | 1 | 6 | 22 | AboutPage, BreadcrumbList | 0 | 0 |
+| `contact/index.html` | yes | 60 | 147 | 1 | 2 | 18 | BreadcrumbList, ContactPage | 0 | 0 |
+| `index.html` | yes | 53 | 141 | 1 | 6 | 35 | Organization, ProfessionalService, WebPage, WebSite | 0 | 0 |
+| `insights/index.html` | yes | 26 | 137 | 1 | 2 | 20 | BreadcrumbList, CollectionPage | 0 | 0 |
+| `insights/owner-side-development-support-australia/index.html` | yes | 57 | 152 | 1 | 5 | 27 | Article, BreadcrumbList, WebPage | 0 | 0 |
+| `privacy-policy/index.html` | yes | 32 | 107 | 1 | 6 | 18 | BreadcrumbList, WebPage | 0 | 0 |
+| `services/due-diligence/index.html` | yes | 56 | 158 | 1 | 6 | 26 | BreadcrumbList, WebPage | 0 | 0 |
+| `services/grid-connection-approvals/index.html` | yes | 51 | 160 | 1 | 6 | 24 | BreadcrumbList, WebPage | 0 | 0 |
+| `services/index.html` | yes | 61 | 157 | 1 | 9 | 27 | BreadcrumbList, WebPage | 0 | 0 |
+| `services/land-stakeholder-liaison/index.html` | yes | 61 | 151 | 1 | 6 | 25 | BreadcrumbList, WebPage | 0 | 0 |
+| `services/planning-environmental-approvals/index.html` | yes | 60 | 150 | 1 | 6 | 25 | BreadcrumbList, WebPage | 0 | 0 |
 
 ## Errors and Warnings
 
@@ -17,7 +28,7 @@
 
 ## Improvement Opportunities
 
-- None found.
+- `thin_content` — `contact/index.html`: Visible text is approximately 220 words; review whether more useful detail is needed
 
 ## AEO Review Queue
 

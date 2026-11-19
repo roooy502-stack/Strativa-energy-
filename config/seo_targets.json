@@ -43,12 +43,24 @@
     "NEM connection pathway"
   ],
   "service_to_page_mapping": {
-    "Market Entry Framework": ["/"],
-    "Development Workstream Management": ["/"],
-    "Planning & Environmental Approvals": ["/"],
-    "Land & Stakeholder Liaison": ["/"],
-    "Grid & Connection Approvals": ["/"],
-    "Due Diligence": ["/"]
+    "Market Entry Framework": [
+      "/services/#market-entry-framework"
+    ],
+    "Development Workstream Management": [
+      "/services/#development-workstream-management"
+    ],
+    "Planning & Environmental Approvals": [
+      "/services/planning-environmental-approvals/"
+    ],
+    "Land & Stakeholder Liaison": [
+      "/services/land-stakeholder-liaison/"
+    ],
+    "Grid & Connection Approvals": [
+      "/services/grid-connection-approvals/"
+    ],
+    "Due Diligence": [
+      "/services/due-diligence/"
+    ]
   },
   "aeo_questions": [
     "What does Strativa Energy specialise in?",
@@ -60,10 +72,105 @@
     "Who should contact Strativa Energy?"
   ],
   "geo_review_queue": [
-    {"topic": "company_identity", "description": "Keep Strativa Energy name, role, and owner-side positioning consistent."},
-    {"topic": "services", "description": "Ensure service descriptions remain visible, specific, and evidence-backed."},
-    {"topic": "location", "description": "Review Australia and Melbourne/VIC geographic clarity against visible content."},
-    {"topic": "contact", "description": "Keep the confirmed email and contact pathway clear."},
-    {"topic": "quotable_answers", "description": "Review concise factual paragraphs that can answer project-development questions."}
+    {
+      "topic": "company_identity",
+      "description": "Keep Strativa Energy name, role, and owner-side positioning consistent."
+    },
+    {
+      "topic": "services",
+      "description": "Ensure service descriptions remain visible, specific, and evidence-backed."
+    },
+    {
+      "topic": "location",
+      "description": "Review Australia and Melbourne/VIC geographic clarity against visible content."
+    },
+    {
+      "topic": "contact",
+      "description": "Keep the confirmed email and contact pathway clear."
+    },
+    {
+      "topic": "quotable_answers",
+      "description": "Review concise factual paragraphs that can answer project-development questions."
+    }
+  ],
+  "page_keyword_map": {
+    "/": {
+      "intent": "Brand and broad commercial",
+      "primary": [
+        "Australian renewable energy project development",
+        "utility-scale solar project development Australia",
+        "battery energy storage project development Australia"
+      ]
+    },
+    "/about/": {
+      "intent": "Who the company is and what owner-side means",
+      "primary": [
+        "owner-side development support Australia"
+      ],
+      "geographic": [
+        "Melbourne",
+        "Victoria"
+      ]
+    },
+    "/services/": {
+      "intent": "Overview of services",
+      "primary": [
+        "solar project development",
+        "BESS project development",
+        "BESS development support Australia",
+        "Australian solar development partner"
+      ],
+      "secondary": [
+        "development workstream management"
+      ]
+    },
+    "/services/planning-environmental-approvals/": {
+      "intent": "Approvals",
+      "primary": [
+        "planning and environmental approvals"
+      ]
+    },
+    "/services/grid-connection-approvals/": {
+      "intent": "Grid connection",
+      "primary": [
+        "grid connection approvals",
+        "grid connection advisory Australia"
+      ]
+    },
+    "/services/land-stakeholder-liaison/": {
+      "intent": "Land and stakeholders",
+      "primary": [
+        "land and stakeholder liaison"
+      ]
+    },
+    "/services/due-diligence/": {
+      "intent": "Due diligence",
+      "primary": [
+        "renewable energy due diligence",
+        "renewable energy project due diligence Australia"
+      ]
+    },
+    "/insights/owner-side-development-support-australia/": {
+      "intent": "Informational: what is owner-side development support",
+      "primary": [
+        "what is owner-side development support"
+      ]
+    },
+    "/contact/": {
+      "intent": "Navigational and enquiry",
+      "primary": [
+        "contact Strativa Energy"
+      ],
+      "geographic": [
+        "Melbourne",
+        "Victoria"
+      ]
+    }
+  },
+  "approval_required": [
+    "Public street address (470 St Kilda Road) is shown on /contact/ and in Organization schema; config only records Melbourne, VIC as confirmed.",
+    "Privacy policy wording needs company/legal review.",
+    "Service page and insights copy restates existing homepage claims only; owner should confirm.",
+    "Package-to-service grouping on /services/ is a topical grouping and needs confirmation."
   ]
 }

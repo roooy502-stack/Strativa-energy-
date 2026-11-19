@@ -21,6 +21,8 @@ class PageParser(HTMLParser):
         self.meta: list[dict[str, str]] = []
         self.links: list[dict[str, str]] = []
         self.images: list[dict[str, str]] = []
+        self.link_tags: list[dict[str, str]] = []
+        self.script_srcs: list[str] = []
         self.headings: list[tuple[str, str]] = []
         self.ids: set[str] = set()
         self.jsonld: list[str] = []
@@ -49,6 +51,10 @@ class PageParser(HTMLParser):
             self.links.append(attrs)
         if tag == "img":
             self.images.append(attrs)
+        if tag == "link":
+            self.link_tags.append(attrs)
+        if tag == "script" and attrs.get("src"):
+            self.script_srcs.append(attrs["src"])
         if tag == "script" and attrs.get("type", "").lower() == "application/ld+json":
             self._in_jsonld = True
             self._jsonld_buffer = []
@@ -114,7 +120,13 @@ def schema_types(parser: PageParser) -> tuple[list[str], list[str]]:
         try:
             value = json.loads(raw)
             values = value if isinstance(value, list) else [value]
+            flat = []
             for item in values:
+                if isinstance(item, dict) and isinstance(item.get("@graph"), list):
+                    flat.extend(item["@graph"])
+                else:
+                    flat.append(item)
+            for item in flat:
                 if isinstance(item, dict):
                     item_types = item.get("@type", [])
                     if isinstance(item_types, str):
@@ -147,57 +159,165 @@ def load_targets(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
-def content_pages(repo_root: Path) -> list[Path]:
+SKIP_DIRS = {".git", "partials", "reports", "node_modules", "google-apps-script", "scripts", "config", "assets"}
+NOINDEX_RE = re.compile(r'<meta\b[^>]*name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', re.I)
+
+
+def all_pages(repo_root: Path) -> list[Path]:
+    """Every real HTML page (excluding verification files, partials and tooling folders)."""
     pages = []
     for path in sorted(repo_root.rglob("*.html")):
-        if path.name == "google743f94c5d2ad6d26.html":
+        rel = path.relative_to(repo_root)
+        if set(rel.parts[:-1]) & SKIP_DIRS:
             continue
-        raw = path.read_text(encoding="utf-8", errors="replace")
-        if not re.search(r'<meta\b[^>]*name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', raw, re.I):
-            pages.append(path)
+        if rel.parent == Path(".") and path.name.startswith("google"):
+            continue
+        pages.append(path)
     return pages
+
+
+def is_noindex(path: Path) -> bool:
+    return bool(NOINDEX_RE.search(path.read_text(encoding="utf-8", errors="replace")))
+
+
+def content_pages(repo_root: Path) -> list[Path]:
+    return [p for p in all_pages(repo_root) if not is_noindex(p)]
+
+
+def expected_url(rel: str, site_url: str) -> str:
+    """Public URL a page file is served at (directory-style URLs with trailing slash)."""
+    path = Path(rel)
+    if path.name == "index.html":
+        parent = path.parent.as_posix()
+        return site_url if parent == "." else f"{site_url}{parent}/"
+    return site_url + rel
+
+
+def local_target(ref: str, page_rel: str) -> str | None:
+    """Resolve a local src/href to a repo-relative file path (no fragment), or None for external."""
+    if not ref or ref.startswith(("mailto:", "tel:", "data:", "javascript:", "#", "//")):
+        return None
+    parsed = urlparse(ref)
+    if parsed.scheme or parsed.netloc:
+        return None
+    raw = parsed.path
+    if not raw:
+        return None
+    base = Path(page_rel).parent
+    target = raw.lstrip("/") if raw.startswith("/") else (base / raw).as_posix()
+    if target.endswith("/") or target == "":
+        target += "index.html"
+    return unquote(target)
+
+
+def jsonld_problems(raw: str) -> list[str]:
+    problems: list[str] = []
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        return [f"invalid JSON ({exc.msg})"]
+    nodes = value.get("@graph", [value]) if isinstance(value, dict) else value
+    if isinstance(value, dict) and "@context" not in value:
+        problems.append("missing @context")
+    for node in nodes:
+        if not isinstance(node, dict):
+            continue
+        kind = node.get("@type")
+        kinds = kind if isinstance(kind, list) else [kind]
+        if not kind:
+            problems.append("node without @type")
+            continue
+        if "BreadcrumbList" in kinds:
+            items = node.get("itemListElement") or []
+            if not items:
+                problems.append("BreadcrumbList without items")
+            for idx, item in enumerate(items, 1):
+                if item.get("position") != idx or not item.get("name") or not item.get("item"):
+                    problems.append(f"BreadcrumbList item {idx} incomplete")
+        if "Article" in kinds:
+            for key in ("headline", "datePublished", "author", "publisher"):
+                if not node.get(key):
+                    problems.append(f"Article missing {key}")
+        if "Organization" in kinds and not (node.get("name") and node.get("url")):
+            problems.append("Organization missing name or url")
+    return problems
 
 
 def audit(repo_root: Path, targets: dict) -> dict:
     site_url = targets.get("site", {}).get("url", DEFAULT_SITE_URL).rstrip("/") + "/"
-    html_files = content_pages(repo_root)
+    host = site_url.rstrip("/")
+    files = all_pages(repo_root)
+    indexable = [p for p in files if not is_noindex(p)]
     pages: list[dict] = []
     errors: list[dict] = []
     opportunities: list[dict] = []
-    titles: list[str] = []
-    descriptions: list[str] = []
-    for path in html_files:
+    titles: dict[str, list[str]] = {}
+    descriptions: dict[str, list[str]] = {}
+    h1s: dict[str, list[str]] = {}
+    inbound: dict[str, set[str]] = {}
+    parsed_cache: dict[str, PageParser] = {}
+
+    def issue(code: str, page: str, message: str, severity: str = "warning") -> None:
+        errors.append({"code": code, "page": page, "severity": severity, "message": message})
+
+    def opportunity(code: str, page: str, message: str) -> None:
+        opportunities.append({"code": code, "page": page, "message": message})
+
+    for path in files:
+        parsed_cache[path.relative_to(repo_root).as_posix()] = parse_page(path)
+
+    for path in files:
         rel = path.relative_to(repo_root).as_posix()
         raw = path.read_text(encoding="utf-8", errors="replace")
-        parser = parse_page(path)
+        parser = parsed_cache[rel]
+        noindex = is_noindex(path)
         title = parser.title.strip()
         description = meta_value(parser, name="description") or ""
         canonical = canonical_value(raw)
         h1 = [t for tag, t in parser.headings if tag == "h1"]
         h2 = [t for tag, t in parser.headings if tag == "h2"]
         types, invalid_jsonld = schema_types(parser)
-        images_missing_alt = [x.get("src", "") for x in parser.images if not x.get("alt", "").strip()]
+        images_missing_alt = [x.get("src", "") for x in parser.images if "alt" not in x]
+        empty_alt_nonlocal = [x.get("src", "") for x in parser.images if x.get("alt") == "" and x.get("role") != "presentation" and x.get("aria-hidden") != "true"]
         local_missing: list[str] = []
         local_links = 0
         for link in parser.links:
-            ref = internal_reference(link.get("href", ""), rel)
+            href = link.get("href", "")
+            ref = internal_reference(href, rel)
             if not ref:
+                if href.startswith("http") and link.get("target") == "_blank" and "noopener" not in link.get("rel", ""):
+                    issue("external_link_rel", rel, f"target=_blank link without rel=noopener: {href}")
                 continue
             local_links += 1
             target, fragment = ref
             target_path = repo_root / target
             if not target_path.exists():
-                local_missing.append(link.get("href", ""))
-            elif fragment and target_path.suffix.lower() == ".html":
-                target_ids = parse_page(target_path).ids
-                if fragment not in target_ids:
-                    local_missing.append(link.get("href", ""))
+                local_missing.append(href)
+                continue
+            target_rel = target_path.relative_to(repo_root).as_posix()
+            if target_rel != rel:
+                inbound.setdefault(target_rel, set()).add(rel)
+            if fragment and target_path.suffix.lower() == ".html":
+                tparser = parsed_cache.get(target_rel) or parse_page(target_path)
+                if fragment not in tparser.ids:
+                    local_missing.append(href)
+            clean = urlparse(href).path
+            if clean and not clean.endswith("/") and "." not in Path(clean).name and not clean.startswith("mailto"):
+                issue("link_trailing_slash", rel, f"Internal link without trailing slash (causes a redirect on most hosts): {href}")
+        # local assets: images, stylesheets, scripts, icons, preload
+        missing_assets: list[str] = []
+        refs = [x.get("src", "") for x in parser.images] + parser.script_srcs + [x.get("href", "") for x in parser.link_tags if x.get("rel", "").lower() not in {"canonical"}]
+        for ref in refs:
+            target = local_target(ref, rel)
+            if target and not (repo_root / target).exists():
+                missing_assets.append(ref)
         page = {
-            "path": rel, "title": title, "title_length": len(title),
+            "path": rel, "url": expected_url(rel, site_url), "indexable": not noindex,
+            "title": title, "title_length": len(title),
             "description": description, "description_length": len(description),
             "canonical": canonical, "h1": h1, "h2": h2,
             "images": len(parser.images), "images_missing_alt": images_missing_alt,
-            "internal_links": local_links, "broken_local_links": local_missing,
+            "internal_links": local_links, "broken_local_links": local_missing, "missing_assets": missing_assets,
             "word_count": len(re.findall(r"\b[\w’'-]+\b", parser.text)),
             "schema_types": types, "invalid_jsonld": invalid_jsonld,
             "has_open_graph": bool(meta_value(parser, prop="og:title") and meta_value(parser, prop="og:description")),
@@ -207,71 +327,109 @@ def audit(repo_root: Path, targets: dict) -> dict:
             "visible_question_headings": [t for tag, t in parser.headings if "?" in t],
         }
         pages.append(page)
-        titles.append(title)
-        descriptions.append(description)
+        if noindex:
+            continue
+        titles.setdefault(title, []).append(rel)
+        descriptions.setdefault(description, []).append(rel)
+        if h1:
+            h1s.setdefault(h1[0], []).append(rel)
 
-        def issue(code: str, message: str, severity: str = "warning") -> None:
-            errors.append({"code": code, "page": rel, "severity": severity, "message": message})
+        if not title: issue("missing_title", rel, "Missing title tag", "error")
+        elif len(title) < 25 or len(title) > 65: issue("title_length", rel, f"Title length is {len(title)} characters")
+        if not description: issue("missing_description", rel, "Missing meta description", "error")
+        elif len(description) < 70 or len(description) > 165: issue("description_length", rel, f"Meta description length is {len(description)} characters")
+        if len(h1) != 1: issue("h1_structure", rel, f"Expected one H1, found {len(h1)}")
+        levels = [int(tag[1]) for tag, _ in parser.headings]
+        for prev, cur in zip(levels, levels[1:]):
+            if cur > prev + 1:
+                issue("heading_skip", rel, f"Heading level jumps from h{prev} to h{cur}")
+                break
+        if not h2: opportunity("missing_h2", rel, "Add clear H2 sections if the page has multiple topics")
+        if not canonical:
+            issue("missing_canonical", rel, "Missing canonical URL", "error")
+        elif canonical != page["url"]:
+            issue("canonical_mismatch", rel, f"Canonical {canonical} differs from the page's own URL {page['url']}", "error")
+        if not (parser.meta and any(m.get("charset") for m in parser.meta)): issue("missing_charset", rel, "Missing meta charset")
+        if not any(m.get("name") == "viewport" for m in parser.meta): issue("missing_viewport", rel, "Missing viewport meta tag", "error")
+        if not re.search(r"<html[^>]*\blang=[\"']en-AU", raw, re.I): issue("html_lang", rel, "html lang is not en-AU")
+        if not page["has_open_graph"]: issue("open_graph", rel, "Incomplete Open Graph title/description")
+        ogimg = meta_value(parser, prop="og:image") or ""
+        if not ogimg.startswith(host + "/"): issue("og_image", rel, "og:image missing or not an absolute production URL")
+        else:
+            og_local = ogimg[len(host) + 1:]
+            if not (repo_root / og_local).exists(): issue("og_image_missing", rel, f"og:image file not found: {og_local}", "error")
+        if (meta_value(parser, prop="og:url") or "") != (canonical or ""): issue("og_url_mismatch", rel, "og:url differs from canonical")
+        if not page["has_twitter_card"]: opportunity("twitter_card", rel, "Add Twitter Card metadata")
+        if images_missing_alt: issue("missing_alt", rel, f"{len(images_missing_alt)} image(s) are missing an alt attribute")
+        if local_missing: issue("broken_local_links", rel, "Broken local links: " + ", ".join(local_missing), "error")
+        if missing_assets: issue("missing_assets", rel, "Referenced local files not found: " + ", ".join(missing_assets), "error")
+        if invalid_jsonld: issue("invalid_jsonld", rel, "One or more JSON-LD blocks are invalid", "error")
+        for raw_ld in parser.jsonld:
+            for prob in jsonld_problems(raw_ld):
+                issue("jsonld_property", rel, prob, "error")
+        nested = Path(rel).parent != Path(".")
+        if nested and "BreadcrumbList" not in " ".join(types) and rel != "404.html":
+            issue("missing_breadcrumb_schema", rel, "Nested page has no BreadcrumbList structured data")
+        if nested and not any('class="breadcrumb"' in raw for _ in [0]):
+            issue("missing_breadcrumb", rel, "Nested page has no visible breadcrumb")
+        if page["word_count"] < 250 and rel not in {"insights/index.html"}:
+            opportunity("thin_content", rel, f"Visible text is approximately {page['word_count']} words; review whether more useful detail is needed")
+        if not page["has_company_identity"]: opportunity("missing_identity", rel, "Clarify company identity in visible content")
+        if not types: opportunity("missing_schema", rel, "Review whether appropriate structured data can be added")
+        if not page["visible_question_headings"] and rel in {"index.html", "about/index.html"}:
+            opportunity("aeo_questions", rel, "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically")
 
-        def opportunity(code: str, message: str) -> None:
-            opportunities.append({"code": code, "page": rel, "message": message})
+    for label, bucket in (("title", titles), ("description", descriptions), ("h1", h1s)):
+        for value, owners in bucket.items():
+            if value and len(owners) > 1:
+                issue(f"duplicate_{label}", "*", f"Duplicate {label} on {', '.join(owners)}: {value}")
 
-        if not title: issue("missing_title", "Missing title tag", "error")
-        elif len(title) < 30 or len(title) > 60: issue("title_length", f"Title length is {len(title)} characters")
-        if not description: issue("missing_description", "Missing meta description", "error")
-        elif len(description) < 70 or len(description) > 160: issue("description_length", f"Meta description length is {len(description)} characters")
-        if len(h1) != 1: issue("h1_structure", f"Expected one H1, found {len(h1)}")
-        if not h2: opportunity("missing_h2", "Add clear H2 sections if the page has multiple topics")
-        if not canonical: issue("missing_canonical", "Missing canonical URL", "error")
-        if not page["has_open_graph"]: opportunity("open_graph", "Add complete Open Graph title and description")
-        if not page["has_twitter_card"]: opportunity("twitter_card", "Add Twitter Card metadata")
-        if images_missing_alt: issue("missing_alt", f"{len(images_missing_alt)} image(s) are missing alt text")
-        if local_missing: issue("broken_local_links", "Broken local links: " + ", ".join(local_missing), "error")
-        if invalid_jsonld: issue("invalid_jsonld", "One or more JSON-LD blocks are invalid", "error")
-        if page["word_count"] < 250: opportunity("thin_content", f"Visible text is approximately {page['word_count']} words; review whether more useful detail is needed")
-        if not page["has_contact"]: opportunity("missing_contact", "Add visible contact information")
-        if not page["has_company_identity"]: opportunity("missing_identity", "Clarify company identity in visible content")
-        if not types: opportunity("missing_schema", "Review whether appropriate structured data can be added")
-        if "Organization" not in types: opportunity("organization_schema", "Review Organization schema")
-        if not any(x in types for x in ("ProfessionalService", "LocalBusiness")):
-            opportunity("service_business_schema", "Review ProfessionalService or LocalBusiness schema where appropriate")
-        if not page["visible_question_headings"]: opportunity("aeo_questions", "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically")
-        geo_signals = (
-            page["has_company_identity"]
-            and bool(re.search(r"Australia|Australian|Melbourne|VIC", parser.text, re.I))
-            and bool(re.search(r"solar|battery|BESS|development|approvals|grid", parser.text, re.I))
-            and page["has_contact"]
-        )
-        if not geo_signals:
-            opportunity("geo_review", "Review entity, service, location, contact, and evidence clarity for GEO")
-
-    duplicates = {value: count for value, count in Counter(x for x in titles if x).items() if count > 1}
-    duplicate_descriptions = {value: count for value, count in Counter(x for x in descriptions if x).items() if count > 1}
-    for value, count in duplicates.items():
-        errors.append({"code": "duplicate_title", "page": "*", "severity": "warning", "message": f"Duplicate title appears {count} times: {value}"})
-    for value, count in duplicate_descriptions.items():
-        errors.append({"code": "duplicate_description", "page": "*", "severity": "warning", "message": f"Duplicate description appears {count} times: {value}"})
+    # orphan pages: indexable pages with no inbound internal link
+    for path in indexable:
+        rel = path.relative_to(repo_root).as_posix()
+        if rel != "index.html" and not inbound.get(rel):
+            issue("orphan_page", rel, "No other page links to this page", "error")
 
     robots_path = repo_root / "robots.txt"
     sitemap_path = repo_root / "sitemap.xml"
     robots = robots_path.read_text(encoding="utf-8", errors="replace") if robots_path.exists() else ""
     sitemap = sitemap_path.read_text(encoding="utf-8", errors="replace") if sitemap_path.exists() else ""
-    sitemap_urls = re.findall(r"<loc>\s*([^<]+)\s*</loc>", sitemap)
-    page_urls = [site_url if p.name == "index.html" else site_url + p.relative_to(repo_root).with_suffix("").as_posix() + ".html" for p in html_files]
-    if not robots_path.exists(): errors.append({"code": "missing_robots", "page": "robots.txt", "severity": "error", "message": "robots.txt is missing"})
-    elif "Sitemap:" not in robots: opportunities.append({"code": "robots_sitemap", "page": "robots.txt", "message": "Add a Sitemap directive"})
-    if not sitemap_path.exists(): errors.append({"code": "missing_sitemap", "page": "sitemap.xml", "severity": "error", "message": "sitemap.xml is missing"})
+    sitemap_urls = re.findall(r"<loc>\s*([^<]+?)\s*</loc>", sitemap)
+    page_urls = [expected_url(p.relative_to(repo_root).as_posix(), site_url) for p in indexable]
+    noindex_urls = [expected_url(p.relative_to(repo_root).as_posix(), site_url) for p in files if is_noindex(p)]
+    if not robots_path.exists():
+        issue("missing_robots", "robots.txt", "robots.txt is missing", "error")
+    else:
+        if f"Sitemap: {site_url}sitemap.xml" not in robots: issue("robots_sitemap", "robots.txt", f"robots.txt should declare 'Sitemap: {site_url}sitemap.xml'")
+        if re.search(r"^\s*Disallow:\s*/\s*$", robots, re.M): issue("robots_blocks_all", "robots.txt", "robots.txt blocks the whole site", "error")
+        if re.search(r"^\s*Disallow:.*(\.css|\.js|/assets)", robots, re.M | re.I): issue("robots_blocks_assets", "robots.txt", "robots.txt blocks CSS, JavaScript or assets", "error")
+    if not sitemap_path.exists():
+        issue("missing_sitemap", "sitemap.xml", "sitemap.xml is missing", "error")
+    else:
+        try:
+            from xml.dom import minidom
+            minidom.parseString(sitemap.encode("utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            issue("sitemap_xml_invalid", "sitemap.xml", f"sitemap.xml is not valid XML: {exc}", "error")
+        if 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' not in sitemap: issue("sitemap_namespace", "sitemap.xml", "Missing sitemap namespace", "error")
     for url in page_urls:
         if url not in sitemap_urls:
-            errors.append({"code": "page_missing_from_sitemap", "page": "sitemap.xml", "severity": "warning", "message": f"Content page is missing from sitemap: {url}"})
-    stale_sitemap = [url for url in sitemap_urls if url not in page_urls]
-    if stale_sitemap:
-        errors.append({"code": "stale_sitemap_url", "page": "sitemap.xml", "severity": "warning", "message": "Sitemap contains non-published URLs: " + ", ".join(stale_sitemap)})
+            issue("page_missing_from_sitemap", "sitemap.xml", f"Indexable page is missing from sitemap: {url}")
+    stale = [u for u in sitemap_urls if u not in page_urls]
+    if stale:
+        issue("stale_sitemap_url", "sitemap.xml", "Sitemap contains URLs that are not indexable canonical pages: " + ", ".join(stale))
+    for u in sitemap_urls:
+        if not u.startswith("https://"): issue("sitemap_not_https", "sitemap.xml", f"Non-HTTPS URL in sitemap: {u}", "error")
+        if u in noindex_urls: issue("sitemap_noindex", "sitemap.xml", f"noindex page in sitemap: {u}", "error")
+    if len(sitemap_urls) != len(set(sitemap_urls)): issue("sitemap_duplicates", "sitemap.xml", "Duplicate URLs in sitemap", "error")
+    if re.search(r"<(changefreq|priority)>", sitemap): opportunity("sitemap_hints", "sitemap.xml", "changefreq and priority are ignored by Google; consider removing them")
+
     return {
-        "audit_version": "1.1.0", "site": site_url,
+        "audit_version": "2.0.0", "site": site_url,
         "generated_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(),
-        "pages_checked": len(html_files), "pages": pages, "robots": {"exists": robots_path.exists(), "has_sitemap_directive": "Sitemap:" in robots},
-        "sitemap": {"exists": sitemap_path.exists(), "urls": sitemap_urls, "pages_missing": [u for u in page_urls if u not in sitemap_urls], "stale_urls": stale_sitemap},
+        "pages_checked": len(files), "indexable_pages": len(indexable),
+        "pages": pages, "robots": {"exists": robots_path.exists(), "has_sitemap_directive": "Sitemap:" in robots},
+        "sitemap": {"exists": sitemap_path.exists(), "urls": sitemap_urls, "pages_missing": [u for u in page_urls if u not in sitemap_urls], "stale_urls": stale},
         "errors": errors, "improvement_opportunities": opportunities,
         "aeo_review_queue": [{"question": q, "status": "review_required", "note": "Do not publish automatically; use only approved visible content."} for q in targets.get("aeo_questions", [])],
         "geo_review_queue": targets.get("geo_review_queue", []),
@@ -280,9 +438,9 @@ def audit(repo_root: Path, targets: dict) -> dict:
 
 
 def markdown_report(result: dict) -> str:
-    lines = ["# Strativa Energy SEO AEO GEO Audit", "", f"- Generated: `{result['generated_at']}`", f"- Pages checked: **{result['pages_checked']}**", f"- Errors and warnings: **{len(result['errors'])}**", f"- Improvement opportunities: **{len(result['improvement_opportunities'])}**", "", "## Page Summary", "", "| Page | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken local links |", "|---|---:|---:|---:|---:|---:|---|---:|---:|"]
+    lines = ["# Strativa Energy SEO AEO GEO Audit", "", f"- Generated: `{result['generated_at']}`", f"- Pages checked: **{result['pages_checked']}** ({result['indexable_pages']} indexable)", f"- Errors and warnings: **{len(result['errors'])}**", f"- Improvement opportunities: **{len(result['improvement_opportunities'])}**", "", "## Page Summary", "", "| Page | Indexable | Title | Description | H1 | H2 | Internal links | Schema | Missing alt | Broken links |", "|---|---|---:|---:|---:|---:|---:|---|---:|---:|"]
     for p in result["pages"]:
-        lines.append(f"| `{p['path']}` | {p['title_length']} | {p['description_length']} | {len(p['h1'])} | {len(p['h2'])} | {p['internal_links']} | {', '.join(p['schema_types']) or 'None'} | {len(p['images_missing_alt'])} | {len(p['broken_local_links'])} |")
+        lines.append(f"| `{p['path']}` | {'yes' if p['indexable'] else 'no'} | {p['title_length']} | {p['description_length']} | {len(p['h1'])} | {len(p['h2'])} | {p['internal_links']} | {', '.join(p['schema_types']) or 'None'} | {len(p['images_missing_alt'])} | {len(p['broken_local_links'])} |")
     lines += ["", "## Errors and Warnings", ""]
     lines += [f"- **{x['severity'].upper()}** `{x['code']}` — `{x['page']}`: {x['message']}" for x in result["errors"]] or ["- None found."]
     lines += ["", "## Improvement Opportunities", ""]
@@ -301,6 +459,7 @@ def main() -> int:
     ap.add_argument("--targets", default="config/seo_targets.json")
     ap.add_argument("--json-out", default="reports/seo-audit-latest.json")
     ap.add_argument("--markdown-out", default="reports/seo-audit-latest.md")
+    ap.add_argument("--strict", action="store_true", help="exit with status 1 if any error-severity issue is found")
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
     result = audit(root, load_targets(root / args.targets))
@@ -310,6 +469,12 @@ def main() -> int:
     json_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     md_path.write_text(markdown_report(result), encoding="utf-8")
     print(f"Audited {result['pages_checked']} page(s); {len(result['errors'])} issue(s); {len(result['improvement_opportunities'])} opportunity(ies).")
+    if args.strict and any(e["severity"] == "error" for e in result["errors"]):
+        print("Strict mode: error-severity issues found.", file=sys.stderr)
+        for e in result["errors"]:
+            if e["severity"] == "error":
+                print(f"  {e['code']} {e['page']}: {e['message']}", file=sys.stderr)
+        return 1
     return 0
 
 

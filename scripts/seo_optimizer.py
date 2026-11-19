@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Deterministic SEO optimizer for review-before-publish workflows.
 
-The optimizer only applies evidence-backed metadata and sitemap changes. It
+The optimizer only keeps social metadata consistent with each page and rebuilds the sitemap. It
 never edits files in dry-run mode and always creates a review branch before
 writing changes when --apply is selected.
 """
@@ -15,10 +15,8 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
 
-TITLE = "Strativa Energy | Australian Solar & BESS Development"
-DESCRIPTION = "Strativa Energy supports international developers entering Australia and progressing utility-scale solar and battery energy storage projects."
+SKIP_DIRS = {".git", "partials", "reports", "node_modules", "google-apps-script", "scripts", "config", "assets"}
 
 
 def run(cmd: list[str], cwd: Path, *, capture: bool = False) -> subprocess.CompletedProcess[str]:
@@ -39,93 +37,59 @@ def replace_or_insert_meta(html_text: str, *, attr: str, key: str, value: str) -
     updated, count = pattern.subn(replacement, html_text, count=1)
     if count:
         return updated, updated != html_text
-    head = re.search(r"</head>", html_text, re.IGNORECASE)
-    if not head:
-        raise ValueError("index.html does not contain </head>")
-    return html_text[:head.start()] + "  " + replacement + "\n" + html_text[head.start():], True
+    anchor = re.search(r"<script type=\"application/ld\+json\">|</head>", html_text, re.IGNORECASE)
+    if not anchor:
+        raise ValueError("page does not contain </head>")
+    return html_text[:anchor.start()] + replacement + "\n" + html_text[anchor.start():], True
 
 
-def replace_title(html_text: str) -> tuple[str, bool]:
-    replacement = f"<title>{html.escape(TITLE)}</title>"
-    updated, count = re.subn(r"<title\b[^>]*>.*?</title>", replacement, html_text, count=1, flags=re.IGNORECASE | re.DOTALL)
-    if not count:
-        head = re.search(r"</head>", html_text, re.IGNORECASE)
-        if not head:
-            raise ValueError("index.html does not contain </head>")
-        return html_text[:head.start()] + "  " + replacement + "\n" + html_text[head.start():], True
-    return updated, updated != html_text
-
-
-def is_indexable(path: Path, root: Path) -> bool:
+def is_indexable(path: Path) -> bool:
     text = path.read_text(encoding="utf-8", errors="replace")
     return not re.search(r'<meta\b[^>]*name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', text, re.I)
 
 
 def published_pages(root: Path) -> list[Path]:
-    return sorted(
-        p for p in root.rglob("*.html")
-        if ".git" not in p.parts and p.name != "google743f94c5d2ad6d26.html" and is_indexable(p, root)
-    )
+    out = []
+    for p in sorted(root.rglob("*.html")):
+        rel = p.relative_to(root)
+        if set(rel.parts[:-1]) & SKIP_DIRS or (rel.parent == Path(".") and p.name.startswith("google")):
+            continue
+        if is_indexable(p):
+            out.append(p)
+    return out
 
 
-def sitemap_text(root: Path, canonical: str, existing: str) -> str:
-    pages = published_pages(root)
-    rows: list[str] = []
-    expected: list[str] = []
-    for path in pages:
-        loc = canonical if path.name == "index.html" else urljoin(canonical, path.relative_to(root).as_posix())
-        expected.append(loc)
-        rows.append("  <url>\n    <loc>" + html.escape(loc) + "</loc>\n  </url>")
-    current = re.findall(r"<loc>\s*([^<]+)\s*</loc>", existing)
-    if current == expected:
-        return existing
-    generated = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\n'
-    generated += "\n\n".join(rows)
-    generated += "\n\n</urlset>\n"
-    return generated
+def page_text(html_text: str) -> tuple[str, str]:
+    title = re.search(r"<title\b[^>]*>(.*?)</title>", html_text, re.I | re.S)
+    desc = re.search(r'<meta\b[^>]*name=["\']description["\'][^>]*content=["\']([^"\']*)', html_text, re.I)
+    return (html.unescape(title.group(1).strip()) if title else "", html.unescape(desc.group(1)) if desc else "")
 
 
 def optimize(root: Path, targets: dict) -> list[str]:
-    site = targets.get("site", {}).get("url", "https://strativaenergy.com.au/")
-    canonical = site.rstrip("/") + "/"
-    index = root / "index.html"
-    if not index.exists():
-        raise FileNotFoundError("index.html not found")
-    original = index.read_text(encoding="utf-8")
-    updated, changed = replace_title(original)
-    changes = ["Updated homepage title"] if changed else []
-    updated, changed = replace_or_insert_meta(updated, attr="name", key="description", value=DESCRIPTION)
-    if changed:
-        changes.append("Updated homepage meta description")
-    confirmed = {
-        "og:type": "website",
-        "og:url": canonical,
-        "og:title": TITLE,
-        "og:description": DESCRIPTION,
-        "og:image": urljoin(canonical, "assets/hero.webp"),
-        "twitter:card": "summary_large_image",
-        "twitter:title": TITLE,
-        "twitter:description": DESCRIPTION,
-        "twitter:image": urljoin(canonical, "assets/hero.webp"),
-    }
-    for key, value in confirmed.items():
-        attr = "property" if key.startswith("og:") else "name"
-        updated, changed = replace_or_insert_meta(updated, attr=attr, key=key, value=value)
-        if changed:
-            changes.append(f"Updated {key}")
-    if not (root / "assets/hero.webp").is_file():
-        raise FileNotFoundError("assets/hero.webp is required for social metadata")
-    if updated != original:
-        index.write_text(updated, encoding="utf-8")
-
+    """Keep Open Graph and Twitter titles/descriptions in step with each page's own
+    <title> and meta description, then rebuild the sitemap. Page copy is never rewritten."""
+    changes: list[str] = []
+    for path in published_pages(root):
+        original = path.read_text(encoding="utf-8")
+        title, desc = page_text(original)
+        if not title or not desc:
+            continue
+        updated = original
+        for key, value in (("og:title", title), ("og:description", desc), ("twitter:title", title), ("twitter:description", desc)):
+            attr = "property" if key.startswith("og:") else "name"
+            updated, changed = replace_or_insert_meta(updated, attr=attr, key=key, value=value)
+            if changed:
+                changes.append(f"{path.relative_to(root).as_posix()}: synced {key}")
+        if updated != original:
+            path.write_text(updated, encoding="utf-8")
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import build_sitemap  # noqa: E402
     sitemap = root / "sitemap.xml"
-    if not sitemap.exists():
-        raise FileNotFoundError("sitemap.xml not found")
-    old_sitemap = sitemap.read_text(encoding="utf-8")
-    new_sitemap = sitemap_text(root, canonical, old_sitemap)
-    if new_sitemap != old_sitemap:
-        sitemap.write_text(new_sitemap, encoding="utf-8")
-        changes.append("Rebuilt sitemap from published indexable HTML pages")
+    old = sitemap.read_text(encoding="utf-8") if sitemap.exists() else ""
+    new = build_sitemap.render(build_sitemap.entries(root))
+    if build_sitemap.locs(old) != build_sitemap.locs(new):
+        sitemap.write_text(new, encoding="utf-8")
+        changes.append("Rebuilt sitemap from indexable canonical pages")
     return changes
 
 

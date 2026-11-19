@@ -1,11 +1,113 @@
 {
-  "audit_version": "1.1.0",
+  "audit_version": "2.0.0",
   "site": "https://strativaenergy.com.au/",
-  "generated_at": "2026-11-10T02:38:15.909889+00:00",
-  "pages_checked": 1,
+  "generated_at": "2026-11-19T21:03:20.136737+00:00",
+  "pages_checked": 12,
+  "indexable_pages": 11,
   "pages": [
     {
+      "path": "404.html",
+      "url": "https://strativaenergy.com.au/404.html",
+      "indexable": false,
+      "title": "Page not found | Strativa Energy",
+      "title_length": 32,
+      "description": "The page you requested could not be found.",
+      "description_length": 42,
+      "canonical": null,
+      "h1": [
+        "Page not found"
+      ],
+      "h2": [],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 21,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 91,
+      "schema_types": [],
+      "invalid_jsonld": [],
+      "has_open_graph": false,
+      "has_twitter_card": false,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
+    {
+      "path": "about/index.html",
+      "url": "https://strativaenergy.com.au/about/",
+      "indexable": true,
+      "title": "About Strativa Energy | Owner-Side Development Support",
+      "title_length": 54,
+      "description": "Strativa Energy is an owner-side development function for international developers progressing utility-scale solar and battery storage projects in Australia.",
+      "description_length": 157,
+      "canonical": "https://strativaenergy.com.au/about/",
+      "h1": [
+        "About Strativa Energy"
+      ],
+      "h2": [
+        "Who we are",
+        "Where we are based",
+        "Why local capability matters",
+        "Strativa's role",
+        "How we work with developers",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 3,
+      "images_missing_alt": [],
+      "internal_links": 22,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 464,
+      "schema_types": [
+        "AboutPage",
+        "BreadcrumbList"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "contact/index.html",
+      "url": "https://strativaenergy.com.au/contact/",
+      "indexable": true,
+      "title": "Contact Strativa Energy | Solar & BESS Development Enquiries",
+      "title_length": 60,
+      "description": "Contact Strativa Energy in Melbourne about owner-side development support for utility-scale solar and battery energy storage projects in Australia.",
+      "description_length": 147,
+      "canonical": "https://strativaenergy.com.au/contact/",
+      "h1": [
+        "Contact Strativa Energy"
+      ],
+      "h2": [
+        "How to reach us",
+        "Start a conversation"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 18,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 220,
+      "schema_types": [
+        "BreadcrumbList",
+        "ContactPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
+    {
       "path": "index.html",
+      "url": "https://strativaenergy.com.au/",
+      "indexable": true,
       "title": "Strativa Energy | Australian Solar & BESS Development",
       "title_length": 53,
       "description": "Strativa Energy supports international developers entering Australia and progressing utility-scale solar and battery energy storage projects.",
@@ -20,17 +122,19 @@
         "Focused entry points.",
         "Four stages that follow the project forward.",
         "Built around the developer.",
-        "Your owner-side development function.",
         "Considering an Australian solar or BESS opportunity?"
       ],
       "images": 5,
       "images_missing_alt": [],
-      "internal_links": 10,
+      "internal_links": 35,
       "broken_local_links": [],
-      "word_count": 1047,
+      "missing_assets": [],
+      "word_count": 768,
       "schema_types": [
         "Organization",
-        "ProfessionalService"
+        "ProfessionalService",
+        "WebPage",
+        "WebSite"
       ],
       "invalid_jsonld": [],
       "has_open_graph": true,
@@ -39,6 +143,316 @@
       "has_company_identity": true,
       "visible_question_headings": [
         "How does Strativa Energy support Australian projects?",
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "insights/index.html",
+      "url": "https://strativaenergy.com.au/insights/",
+      "indexable": true,
+      "title": "Insights | Strativa Energy",
+      "title_length": 26,
+      "description": "Articles from Strativa Energy on owner-side development support for utility-scale solar and battery energy storage projects in Australia.",
+      "description_length": 137,
+      "canonical": "https://strativaenergy.com.au/insights/",
+      "h1": [
+        "Insights"
+      ],
+      "h2": [
+        "What is owner-side development support for Australian solar and BESS projects?",
+        "Have a question about your project?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 20,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 157,
+      "schema_types": [
+        "BreadcrumbList",
+        "CollectionPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "What is owner-side development support for Australian solar and BESS projects?",
+        "Have a question about your project?"
+      ]
+    },
+    {
+      "path": "insights/owner-side-development-support-australia/index.html",
+      "url": "https://strativaenergy.com.au/insights/owner-side-development-support-australia/",
+      "indexable": true,
+      "title": "What Is Owner-Side Development Support? | Strativa Energy",
+      "title_length": 57,
+      "description": "What owner-side development support involves for utility-scale solar and BESS projects in Australia, and how Strativa Energy structures its engagements.",
+      "description_length": 152,
+      "canonical": "https://strativaenergy.com.au/insights/owner-side-development-support-australia/",
+      "h1": [
+        "What is owner-side development support for Australian solar and BESS projects?"
+      ],
+      "h2": [
+        "The short answer",
+        "Why international developers need local capability",
+        "What the support covers",
+        "How engagements are structured",
+        "Talk to us"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 27,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 357,
+      "schema_types": [
+        "Article",
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "What is owner-side development support for Australian solar and BESS projects?"
+      ]
+    },
+    {
+      "path": "privacy-policy/index.html",
+      "url": "https://strativaenergy.com.au/privacy-policy/",
+      "indexable": true,
+      "title": "Privacy Policy | Strativa Energy",
+      "title_length": 32,
+      "description": "How the Strativa Energy website handles enquiry form submissions, analytics and other personal information.",
+      "description_length": 107,
+      "canonical": "https://strativaenergy.com.au/privacy-policy/",
+      "h1": [
+        "Privacy policy"
+      ],
+      "h2": [
+        "About this policy",
+        "Information we collect",
+        "How we use it",
+        "Service providers",
+        "Access, correction and complaints",
+        "Changes to this policy"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 18,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 338,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
+    {
+      "path": "services/due-diligence/index.html",
+      "url": "https://strativaenergy.com.au/services/due-diligence/",
+      "indexable": true,
+      "title": "Renewable Energy Project Due Diligence | Strativa Energy",
+      "title_length": 56,
+      "description": "Independent due diligence for utility-scale solar and BESS projects in Australia: constraints, permits, tenure and connection risk with clear go/no-go advice.",
+      "description_length": 158,
+      "canonical": "https://strativaenergy.com.au/services/due-diligence/",
+      "h1": [
+        "Due diligence for Australian solar and BESS projects"
+      ],
+      "h2": [
+        "What this service covers",
+        "Why independence matters",
+        "Where it fits in an engagement",
+        "Starter packages",
+        "Related services",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 26,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 311,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "services/grid-connection-approvals/index.html",
+      "url": "https://strativaenergy.com.au/services/grid-connection-approvals/",
+      "indexable": true,
+      "title": "Grid Connection Approvals Support | Strativa Energy",
+      "title_length": 51,
+      "description": "Owner-side support across the six-stage NEM connection pathway for utility-scale solar and battery storage projects in Australia, from enquiry to commissioning.",
+      "description_length": 160,
+      "canonical": "https://strativaenergy.com.au/services/grid-connection-approvals/",
+      "h1": [
+        "Grid and connection approvals for solar and BESS projects"
+      ],
+      "h2": [
+        "The six-stage NEM connection pathway",
+        "Why sequencing matters",
+        "Where it fits in an engagement",
+        "Starter packages",
+        "Related services",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 24,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 346,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "services/index.html",
+      "url": "https://strativaenergy.com.au/services/",
+      "indexable": true,
+      "title": "Solar & BESS Development Services Australia | Strativa Energy",
+      "title_length": 61,
+      "description": "Six owner-side development services for utility-scale solar and BESS projects in Australia: market entry, approvals, land, grid connection and due diligence.",
+      "description_length": 157,
+      "canonical": "https://strativaenergy.com.au/services/",
+      "h1": [
+        "Development services for Australian solar and BESS projects"
+      ],
+      "h2": [
+        "Six services, one development function",
+        "Market Entry Framework",
+        "Development Workstream Management",
+        "Planning & Environmental Approvals",
+        "Land & Stakeholder Liaison",
+        "Grid & Connection Approvals",
+        "Due Diligence",
+        "How services fit the project stages",
+        "Not sure which service fits your project stage?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 27,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 515,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Not sure which service fits your project stage?"
+      ]
+    },
+    {
+      "path": "services/land-stakeholder-liaison/index.html",
+      "url": "https://strativaenergy.com.au/services/land-stakeholder-liaison/",
+      "indexable": true,
+      "title": "Land & Stakeholder Liaison for Solar & BESS | Strativa Energy",
+      "title_length": 61,
+      "description": "Landowner outreach, easements, council and community engagement for utility-scale solar and BESS projects in Australia, coordinated by Strativa Energy.",
+      "description_length": 151,
+      "canonical": "https://strativaenergy.com.au/services/land-stakeholder-liaison/",
+      "h1": [
+        "Land and stakeholder liaison for solar and BESS projects"
+      ],
+      "h2": [
+        "What this service covers",
+        "Why local presence matters",
+        "Where it fits in an engagement",
+        "Starter packages",
+        "Related services",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 25,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 308,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "services/planning-environmental-approvals/index.html",
+      "url": "https://strativaenergy.com.au/services/planning-environmental-approvals/",
+      "indexable": true,
+      "title": "Planning & Environmental Approvals Support | Strativa Energy",
+      "title_length": 60,
+      "description": "Owner-side planning, environmental and cultural heritage approvals support for utility-scale solar and BESS projects in Australia, led from Melbourne.",
+      "description_length": 150,
+      "canonical": "https://strativaenergy.com.au/services/planning-environmental-approvals/",
+      "h1": [
+        "Planning and environmental approvals for solar and BESS projects"
+      ],
+      "h2": [
+        "What this service covers",
+        "Why approvals need early attention",
+        "Where it fits in an engagement",
+        "Starter packages",
+        "Related services",
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 25,
+      "broken_local_links": [],
+      "missing_assets": [],
+      "word_count": 358,
+      "schema_types": [
+        "BreadcrumbList",
+        "WebPage"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
         "Considering an Australian solar or BESS opportunity?"
       ]
     }
@@ -50,13 +464,29 @@
   "sitemap": {
     "exists": true,
     "urls": [
-      "https://strativaenergy.com.au/"
+      "https://strativaenergy.com.au/",
+      "https://strativaenergy.com.au/about/",
+      "https://strativaenergy.com.au/contact/",
+      "https://strativaenergy.com.au/insights/",
+      "https://strativaenergy.com.au/insights/owner-side-development-support-australia/",
+      "https://strativaenergy.com.au/privacy-policy/",
+      "https://strativaenergy.com.au/services/",
+      "https://strativaenergy.com.au/services/due-diligence/",
+      "https://strativaenergy.com.au/services/grid-connection-approvals/",
+      "https://strativaenergy.com.au/services/land-stakeholder-liaison/",
+      "https://strativaenergy.com.au/services/planning-environmental-approvals/"
     ],
     "pages_missing": [],
     "stale_urls": []
   },
   "errors": [],
-  "improvement_opportunities": [],
+  "improvement_opportunities": [
+    {
+      "code": "thin_content",
+      "page": "contact/index.html",
+      "message": "Visible text is approximately 220 words; review whether more useful detail is needed"
+    }
+  ],
   "aeo_review_queue": [
     {
       "question": "What does Strativa Energy specialise in?",

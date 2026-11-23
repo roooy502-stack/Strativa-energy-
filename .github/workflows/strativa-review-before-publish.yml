@@ -52,15 +52,17 @@ jobs:
         id: optimizer
         if: steps.week_guard.outputs.run_optimizer == 'true'
         shell: bash
+        env:
+          OPTIMIZER_OUTPUT: ${{ runner.temp }}/optimizer-output.txt
         run: |
           set +e
-          python3 scripts/seo_optimizer.py --apply > optimizer-output.txt 2>&1
+          python3 scripts/seo_optimizer.py --apply > "$OPTIMIZER_OUTPUT" 2>&1
           status=$?
-          cat optimizer-output.txt
+          cat "$OPTIMIZER_OUTPUT"
           if [ "$status" -ne 0 ]; then exit "$status"; fi
           branch=$(python3 - <<'PY'
-          import json, re
-          text=open('optimizer-output.txt', encoding='utf-8').read()
+          import os, re
+          text=open(os.environ['OPTIMIZER_OUTPUT'], encoding='utf-8').read()
           m=re.search(r'"branch":\s*"([^"]+)"', text)
           print(m.group(1) if m else '')
           PY
@@ -104,4 +106,4 @@ jobs:
           path: |
             reports/seo-audit-latest.md
             reports/seo-audit-latest.json
-            optimizer-output.txt
+            ${{ runner.temp }}/optimizer-output.txt

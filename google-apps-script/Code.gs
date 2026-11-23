@@ -11,7 +11,7 @@
 
 const CONFIG = {
   siteUrl: 'https://strativaenergy.com.au/',
-  ga4PropertyId: '', // Optional. Leave blank to auto-discover a web property.
+  ga4PropertyId: '556164746', // GA4 Property ID for Strativa Energy.
   driveFolderName: 'Strativa Energy Monthly Reports',
   timezone: 'Australia/Melbourne',
   topRows: 25

@@ -1,9 +1,171 @@
 {
   "audit_version": "1.1.0",
   "site": "https://strativaenergy.com.au/",
-  "generated_at": "2026-11-10T02:38:15.909889+00:00",
-  "pages_checked": 1,
+  "generated_at": "2026-11-23T20:20:19.264545+00:00",
+  "pages_checked": 6,
   "pages": [
+    {
+      "path": "about.html",
+      "title": "About Strativa Energy | Australian Renewable Energy Development",
+      "title_length": 63,
+      "description": "Strativa Energy provides owner-side development support for international developers progressing utility-scale solar and battery energy storage projects in Australia.",
+      "description_length": 166,
+      "canonical": "https://strativaenergy.com.au/about",
+      "h1": [
+        "Specialist Australian capability."
+      ],
+      "h2": [
+        "Local capability. Owner-side control.",
+        "Why local capability matters"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 12,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 185,
+      "schema_types": [
+        "BreadcrumbList",
+        "ProfessionalService"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
+    {
+      "path": "approach.html",
+      "title": "Our Role | Owner-Side Renewable Energy Development Australia",
+      "title_length": 60,
+      "description": "Learn how Strativa Energy acts as the owner-side development function for international solar and BESS developer teams entering Australia.",
+      "description_length": 138,
+      "canonical": "https://strativaenergy.com.au/approach",
+      "h1": [
+        "Your owner-side development function."
+      ],
+      "h2": [
+        "Built around the developer"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 12,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 149,
+      "schema_types": [
+        "BreadcrumbList",
+        "ProfessionalService"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
+    {
+      "path": "contact.html",
+      "title": "Contact Strativa Energy | Australian Solar and BESS Projects",
+      "title_length": 60,
+      "description": "Contact Strativa Energy about Australian solar, battery energy storage and renewable energy development support.",
+      "description_length": 112,
+      "canonical": "https://strativaenergy.com.au/contact",
+      "h1": [
+        "Considering an Australian solar or BESS opportunity?"
+      ],
+      "h2": [
+        "Start a conversation."
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 11,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 142,
+      "schema_types": [
+        "BreadcrumbList",
+        "ProfessionalService"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": [
+        "Considering an Australian solar or BESS opportunity?"
+      ]
+    },
+    {
+      "path": "engagement.html",
+      "title": "Engagement Stages | Strativa Energy",
+      "title_length": 35,
+      "description": "See how Strativa Energy sequences Australian renewable energy development support from market exploration through connection and FID readiness.",
+      "description_length": 143,
+      "canonical": "https://strativaenergy.com.au/engagement",
+      "h1": [
+        "From entry roadmap to FID readiness."
+      ],
+      "h2": [
+        "A clear engagement model"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 12,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 164,
+      "schema_types": [
+        "BreadcrumbList",
+        "ProfessionalService"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
+    },
     {
       "path": "index.html",
       "title": "Strativa Energy | Australian Solar & BESS Development",
@@ -25,9 +187,19 @@
       ],
       "images": 5,
       "images_missing_alt": [],
-      "internal_links": 10,
-      "broken_local_links": [],
-      "word_count": 1047,
+      "internal_links": 14,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 1051,
       "schema_types": [
         "Organization",
         "ProfessionalService"
@@ -41,6 +213,46 @@
         "How does Strativa Energy support Australian projects?",
         "Considering an Australian solar or BESS opportunity?"
       ]
+    },
+    {
+      "path": "services.html",
+      "title": "Services | Solar and BESS Development Support Australia",
+      "title_length": 55,
+      "description": "Explore Strativa Energy services across market entry, approvals, land, stakeholders, grid connection and due diligence for Australian solar and BESS projects.",
+      "description_length": 158,
+      "canonical": "https://strativaenergy.com.au/services",
+      "h1": [
+        "Six services. One development function."
+      ],
+      "h2": [
+        "Focused entry points"
+      ],
+      "images": 2,
+      "images_missing_alt": [],
+      "internal_links": 12,
+      "broken_local_links": [
+        "/about",
+        "/services",
+        "/engagement",
+        "/approach",
+        "/contact",
+        "/contact",
+        "/about",
+        "/services",
+        "/engagement",
+        "/contact"
+      ],
+      "word_count": 235,
+      "schema_types": [
+        "BreadcrumbList",
+        "ProfessionalService"
+      ],
+      "invalid_jsonld": [],
+      "has_open_graph": true,
+      "has_twitter_card": true,
+      "has_contact": true,
+      "has_company_identity": true,
+      "visible_question_headings": []
     }
   ],
   "robots": {
@@ -50,13 +262,186 @@
   "sitemap": {
     "exists": true,
     "urls": [
-      "https://strativaenergy.com.au/"
+      "https://strativaenergy.com.au/",
+      "https://strativaenergy.com.au/about",
+      "https://strativaenergy.com.au/services",
+      "https://strativaenergy.com.au/engagement",
+      "https://strativaenergy.com.au/approach",
+      "https://strativaenergy.com.au/contact"
     ],
-    "pages_missing": [],
-    "stale_urls": []
+    "pages_missing": [
+      "https://strativaenergy.com.au/about.html",
+      "https://strativaenergy.com.au/approach.html",
+      "https://strativaenergy.com.au/contact.html",
+      "https://strativaenergy.com.au/engagement.html",
+      "https://strativaenergy.com.au/services.html"
+    ],
+    "stale_urls": [
+      "https://strativaenergy.com.au/about",
+      "https://strativaenergy.com.au/services",
+      "https://strativaenergy.com.au/engagement",
+      "https://strativaenergy.com.au/approach",
+      "https://strativaenergy.com.au/contact"
+    ]
   },
-  "errors": [],
-  "improvement_opportunities": [],
+  "errors": [
+    {
+      "code": "title_length",
+      "page": "about.html",
+      "severity": "warning",
+      "message": "Title length is 63 characters"
+    },
+    {
+      "code": "description_length",
+      "page": "about.html",
+      "severity": "warning",
+      "message": "Meta description length is 166 characters"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "about.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "approach.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "contact.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "engagement.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "index.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "broken_local_links",
+      "page": "services.html",
+      "severity": "error",
+      "message": "Broken local links: /about, /services, /engagement, /approach, /contact, /contact, /about, /services, /engagement, /contact"
+    },
+    {
+      "code": "page_missing_from_sitemap",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Content page is missing from sitemap: https://strativaenergy.com.au/about.html"
+    },
+    {
+      "code": "page_missing_from_sitemap",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Content page is missing from sitemap: https://strativaenergy.com.au/approach.html"
+    },
+    {
+      "code": "page_missing_from_sitemap",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Content page is missing from sitemap: https://strativaenergy.com.au/contact.html"
+    },
+    {
+      "code": "page_missing_from_sitemap",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Content page is missing from sitemap: https://strativaenergy.com.au/engagement.html"
+    },
+    {
+      "code": "page_missing_from_sitemap",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Content page is missing from sitemap: https://strativaenergy.com.au/services.html"
+    },
+    {
+      "code": "stale_sitemap_url",
+      "page": "sitemap.xml",
+      "severity": "warning",
+      "message": "Sitemap contains non-published URLs: https://strativaenergy.com.au/about, https://strativaenergy.com.au/services, https://strativaenergy.com.au/engagement, https://strativaenergy.com.au/approach, https://strativaenergy.com.au/contact"
+    }
+  ],
+  "improvement_opportunities": [
+    {
+      "code": "thin_content",
+      "page": "about.html",
+      "message": "Visible text is approximately 185 words; review whether more useful detail is needed"
+    },
+    {
+      "code": "organization_schema",
+      "page": "about.html",
+      "message": "Review Organization schema"
+    },
+    {
+      "code": "aeo_questions",
+      "page": "about.html",
+      "message": "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically"
+    },
+    {
+      "code": "thin_content",
+      "page": "approach.html",
+      "message": "Visible text is approximately 149 words; review whether more useful detail is needed"
+    },
+    {
+      "code": "organization_schema",
+      "page": "approach.html",
+      "message": "Review Organization schema"
+    },
+    {
+      "code": "aeo_questions",
+      "page": "approach.html",
+      "message": "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically"
+    },
+    {
+      "code": "thin_content",
+      "page": "contact.html",
+      "message": "Visible text is approximately 142 words; review whether more useful detail is needed"
+    },
+    {
+      "code": "organization_schema",
+      "page": "contact.html",
+      "message": "Review Organization schema"
+    },
+    {
+      "code": "thin_content",
+      "page": "engagement.html",
+      "message": "Visible text is approximately 164 words; review whether more useful detail is needed"
+    },
+    {
+      "code": "organization_schema",
+      "page": "engagement.html",
+      "message": "Review Organization schema"
+    },
+    {
+      "code": "aeo_questions",
+      "page": "engagement.html",
+      "message": "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically"
+    },
+    {
+      "code": "thin_content",
+      "page": "services.html",
+      "message": "Visible text is approximately 235 words; review whether more useful detail is needed"
+    },
+    {
+      "code": "organization_schema",
+      "page": "services.html",
+      "message": "Review Organization schema"
+    },
+    {
+      "code": "aeo_questions",
+      "page": "services.html",
+      "message": "Review opportunities for direct, visible answer blocks; do not publish FAQ automatically"
+    }
+  ],
   "aeo_review_queue": [
     {
       "question": "What does Strativa Energy specialise in?",
